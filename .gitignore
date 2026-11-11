@@ -1,0 +1,25 @@
+# Secrets
+.env
+.env.*
+
+# Keycloak database
+keycloak-data/
+
+# Kerberos credentials
+keytabs/
+*.keytab
+
+# Private certificates
+*.pfx
+*.p12
+*.key
+*.pem
+
+# .NET build files
+**/bin/
+**/obj/
+.vs/
+
+# IDE files
+.vscode/
+.idea/
