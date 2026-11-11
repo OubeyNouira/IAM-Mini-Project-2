@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PolyCorp.SamlSP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fc5617b89aa7b7cf32786d64c416f7bf3b4e3249")]
 [assembly: System.Reflection.AssemblyProductAttribute("PolyCorp.SamlSP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PolyCorp.SamlSP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

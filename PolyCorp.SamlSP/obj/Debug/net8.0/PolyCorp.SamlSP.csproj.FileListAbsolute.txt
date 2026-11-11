@@ -47,3 +47,4 @@ C:\IAM-Mini-Project-2\PolyCorp.SamlSP\obj\Debug\net8.0\refint\PolyCorp.SamlSP.dl
 C:\IAM-Mini-Project-2\PolyCorp.SamlSP\obj\Debug\net8.0\PolyCorp.SamlSP.pdb
 C:\IAM-Mini-Project-2\PolyCorp.SamlSP\obj\Debug\net8.0\PolyCorp.SamlSP.genruntimeconfig.cache
 C:\IAM-Mini-Project-2\PolyCorp.SamlSP\obj\Debug\net8.0\ref\PolyCorp.SamlSP.dll
+C:\IAM-Mini-Project-2\PolyCorp.SamlSP\obj\Debug\net8.0\PolyCorp.SamlSP.sourcelink.json
