@@ -28,10 +28,33 @@ builder.Services.AddAuthentication(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.LoginPath = "/login";
 })
+
 .AddSaml2(options =>
 {
+    // Public Service Provider identity.
+    // This must match the Keycloak client's Client ID.
+    var spEntityId =
+        builder.Configuration["Saml:SpEntityId"]
+        ?? "https://sso.polycorp.test:5001/Saml2";
+
+    // Public URL used by the browser to access the application.
+    var publicOrigin =
+        builder.Configuration["Saml:PublicOrigin"]
+        ?? "https://sso.polycorp.test:5001";
+
+    // Public Keycloak identity.
+    // This must match the entity ID in Keycloak's SAML metadata.
+    var idpEntityId =
+        builder.Configuration["Saml:IdpEntityId"]
+        ?? "http://sso.polycorp.test:8180/realms/master";
+
+    // Internal Docker address for metadata retrieval.
+    var idpMetadataUrl =
+        builder.Configuration["Saml:IdpMetadataUrl"]
+        ?? "http://sso.polycorp.test:8180/realms/master/protocol/saml/descriptor";
+
     options.SPOptions.EntityId =
-        new EntityId("https://sso.polycorp.test:5001/Saml2");
+        new EntityId(spEntityId);
 
     options.SPOptions.AuthenticateRequestSigningBehavior =
         Sustainsys.Saml2.Configuration.SigningBehavior.Never;
@@ -39,17 +62,17 @@ builder.Services.AddAuthentication(options =>
     options.SPOptions.ModulePath = "/Saml2";
 
     options.SPOptions.PublicOrigin =
-        new Uri("https://sso.polycorp.test:5001");
+        new Uri(publicOrigin);
 
     options.IdentityProviders.Add(
         new IdentityProvider(
-            new EntityId("http://sso.polycorp.test:8180/realms/master"),
+            new EntityId(idpEntityId),
             options.SPOptions)
         {
-            MetadataLocation =
-                "http://sso.polycorp.test:8180/realms/master/protocol/saml/descriptor"
+            MetadataLocation = idpMetadataUrl
         });
 });
+
 
 builder.Services.AddAuthorization();
 

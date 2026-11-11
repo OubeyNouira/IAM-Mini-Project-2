@@ -1,4 +1,21 @@
+
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: polycorp-postgres
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak -d keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   keycloak:
     image: quay.io/keycloak/keycloak:26.8.2
     container_name: keycloak
@@ -6,6 +23,11 @@ services:
     env_file:
       - .env
     environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_STRICT: "false"
       KRB5_CONFIG: /opt/keycloak/conf/krb5.conf
@@ -15,5 +37,32 @@ services:
     volumes:
       - ./keytabs/http.keytab:/opt/keycloak/conf/http.keytab:ro
       - ./krb5.conf:/opt/keycloak/conf/krb5.conf:ro
-      - ./keycloak-data:/opt/keycloak/data
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+
+  saml-sp:
+    build:
+      context: ./PolyCorp.SamlSP
+      dockerfile: Dockerfile
+    container_name: polycorp-saml-sp
+    environment:
+      ASPNETCORE_URLS: https://+:5001
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/saml-sp.pfx
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${SAML_CERT_PASSWORD:?Set SAML_CERT_PASSWORD in .env}
+
+      Saml__SpEntityId: https://sso.polycorp.test:5001/Saml2
+      Saml__PublicOrigin: https://sso.polycorp.test:5001
+      Saml__IdpEntityId: http://sso.polycorp.test:8180/realms/master
+      Saml__IdpMetadataUrl: http://keycloak:8080/realms/master/protocol/saml/descriptor
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./saml-sp.pfx:/https/saml-sp.pfx:ro
+    depends_on:
+      - keycloak
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
