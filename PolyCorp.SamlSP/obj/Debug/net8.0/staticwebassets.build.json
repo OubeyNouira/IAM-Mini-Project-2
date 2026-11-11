@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "dumyzIuu3P0ZxA79dY5fBuvqc/RlPyBAHPZoTIpktok=",
+  "Source": "PolyCorp.SamlSP",
+  "BasePath": "_content/PolyCorp.SamlSP",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

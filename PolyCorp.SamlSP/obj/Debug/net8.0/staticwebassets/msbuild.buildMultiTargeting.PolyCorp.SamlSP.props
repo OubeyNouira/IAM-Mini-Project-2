@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PolyCorp.SamlSP.props" />
+</Project>

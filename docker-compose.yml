@@ -1,0 +1,19 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.2
+    container_name: keycloak
+    command: start-dev --hostname=http://sso.polycorp.test:8180
+    env_file:
+      - .env
+    environment:
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KRB5_CONFIG: /opt/keycloak/conf/krb5.conf
+      JAVA_OPTS_APPEND: "-Djava.security.krb5.conf=/opt/keycloak/conf/krb5.conf"
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./keytabs/http.keytab:/opt/keycloak/conf/http.keytab:ro
+      - ./krb5.conf:/opt/keycloak/conf/krb5.conf:ro
+      - ./keycloak-data:/opt/keycloak/data
+    restart: unless-stopped
